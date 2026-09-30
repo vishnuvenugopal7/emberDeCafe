@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Ember de cafe. - Menu</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Pacifico&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+creamBase: '#ECE9E1',
+cobaltBlue: '#0047BA',
+cobaltLight: 'rgba(0, 71, 186, 0.08)',
+},
+fontFamily: {
+sans: ['Montserrat', 'sans-serif'],
+display: ['Oswald', 'sans-serif'],
+brand: ['Pacifico', 'cursive'],
+subBrand: ['Quicksand', 'sans-serif'],
+}
+}
+}
+}
+</script>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+margin: 0;
+padding: 0;
+font-family: 'Montserrat', sans-serif;
+background-color: #ECE9E1;
+color: #0047BA;
+-webkit-font-smoothing: antialiased;
+overscroll-behavior-y: none;
+}
+
+::-webkit-scrollbar { display: none; }
+* { -ms-overflow-style: none; scrollbar-width: none; }
+
+.main-logo { mix-blend-mode: multiply; }
+
+.glass-panel {
+background: rgba(255, 255, 255, 0.4);
+backdrop-filter: blur(16px);
+-webkit-backdrop-filter: blur(16px);
+border: 1px solid rgba(0, 71, 186, 0.1);
+box-shadow: 0 8px 32px rgba(0, 71, 186, 0.06);
+}
+.glass-header {
+background: rgba(236, 233, 225, 0.85);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+border-bottom: 1px solid rgba(0, 71, 186, 0.1);
+}
+
+.splash-fade-in {
+animation: fadeInUp 0.6s ease-out forwards;
+opacity: 0;
+}
+@keyframes fadeInUp {
+from { opacity: 0; transform: translateY(15px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.accordion-content {
+transition: max-height 0.35s ease-in-out, opacity 0.3s ease-in-out;
+max-height: 0;
+opacity: 0;
+overflow: hidden;
+}
+.accordion-content.open {
+max-height: 5000px;
+opacity: 1;
+}
+.chevron { transition: transform 0.3s ease; }
+.chevron.open { transform: rotate(180deg); }
+</style>
+</head>
+<body class="flex justify-center min-h-screen relative bg-creamBase">
+
+<div class="fixed inset-0 z-0 pointer-events-none" style="background-image: url('https://images.unsplash.com/photo-1603714228681-b399854b8f80?w=1080&q=80'); background-size: cover; background-position: center; opacity: 0.15; mix-blend-mode: multiply;"></div>
+<div class="fixed inset-0 z-0 pointer-events-none" style="background: radial-gradient(ellipse at center, rgba(236,233,225,0.4) 10%, #ECE9E1 85%);"></div>
+
+<div class="w-full max-w-[400px] min-h-screen mx-auto relative z-10 overflow-x-hidden shadow-2xl">
+
+<!-- ==================== SPLASH SCREEN ==================== -->
+<div id="splash-screen" class="flex flex-col items-center justify-between min-h-screen w-full relative z-50">
+<div class="flex flex-col items-center justify-center flex-1 px-8 w-full pt-16">
+<div class="splash-fade-in relative z-10 w-full flex justify-center" style="animation-delay: 0.1s;">
+<img src="https://i.ibb.co/RGynRLRV/Gemini-Generated-Image-nthkugnthkugnthk.png" alt="Ember de cafe Logo" class="main-logo w-72 h-auto object-contain drop-shadow-xl" />
+</div>
+
+<div class="splash-fade-in mt-10 text-center px-4" style="animation-delay: 0.3s;">
+<p class="font-sans font-semibold text-xl leading-relaxed text-cobaltBlue tracking-wide drop-shadow-sm">
+Come for the food,<br/>stay for the vibe.
+</p>
+</div>
+</div>
+
+<div class="splash-fade-in relative z-50 w-full px-6 pb-12" style="animation-delay: 0.5s;">
+<div onclick="forceOpenMenu()" class="w-full flex items-center justify-center px-6 py-5 bg-cobaltBlue rounded-2xl active:scale-95 transition-transform shadow-lg shadow-cobaltBlue/30" style="cursor: pointer; -webkit-tap-highlight-color: transparent; z-index: 99999;">
+<span class="font-sans text-xs font-bold tracking-[0.2em] uppercase text-creamBase pointer-events-none drop-shadow-sm">
+Discover Our Menu
+</span>
+</div>
+</div>
+</div>
+
+<!-- ==================== MENU SCREEN ==================== -->
+<div id="menu-screen" class="relative z-40 min-h-screen flex-col overflow-y-auto w-full" style="display: none;">
+<div class="relative flex flex-col items-center pt-10 pb-6 px-6 glass-header rounded-b-[36px] shrink-0 z-20">
+<img src="https://i.ibb.co/RGynRLRV/Gemini-Generated-Image-nthkugnthkugnthk.png" alt="Ember de cafe Logo" class="main-logo w-32 h-auto object-contain drop-shadow-sm" />
+<div style="margin-top: 14px; width: 30px; height: 2px; background-color: rgba(0, 71, 186, 0.3);"></div>
+</div>
+
+<div id="loading" class="flex flex-col items-center justify-center py-16 w-full flex-1 z-10">
+<div class="w-10 h-10 border-4 border-cobaltBlue/20 border-t-cobaltBlue rounded-full animate-spin"></div>
+<p class="mt-6 text-xs tracking-[0.2em] uppercase font-bold text-cobaltBlue drop-shadow-sm" id="loading-text">Brewing Menu...</p>
+</div>
+
+<div id="accordion-container" class="px-4 py-8 flex flex-col gap-4 w-full z-10"></div>
+</div>
+</div>
+
+<script>
+var rawMenuData = null;
+var isMenuPageOpened = false;
+var CURRENCY_SYMBOL = "₹";
+// EAGER FETCH: Start downloading the menu immediately before the page finishes loading!
+google.script.run
+.withSuccessHandler(function(data) {
+rawMenuData = data;
+// If the user already clicked open while it was fetching, render immediately
+if (isMenuPageOpened) renderAccordionMenu(rawMenuData);
+})
+.withFailureHandler(function(error) {
+rawMenuData = "ERROR";
+if (isMenuPageOpened) {
+document.getElementById('loading').innerHTML = '<p class="text-red-500 text-xs font-bold text-center">Connection timeout.<br>Please refresh the page.</p>';
+}
+})
+.getMenuData();
+
+function forceOpenMenu() {
+try {
+isMenuPageOpened = true;
+document.getElementById('splash-screen').style.display = 'none';
+const menuScreen = document.getElementById('menu-screen');
+menuScreen.style.display = 'flex';
+window.scrollTo(0, 0);
+
+if (rawMenuData && rawMenuData !== "ERROR") {
+renderAccordionMenu(rawMenuData);
+} else if (rawMenuData === "ERROR") {
+document.getElementById('loading').innerHTML = '<p class="text-red-500 text-xs font-bold text-center">Failed to load data.<br>Please refresh.</p>';
+}
+} catch (err) {
+alert("Transition Error: " + err.message);
+}
+}
+
+function getFallbackImage(itemName, categoryName) {
+const cat = categoryName.toLowerCase();
+if(cat.includes('hot')) return 'https://images.unsplash.com/photo-1606509036992-4399d5c5afe4?w=200&q=60';
+if(cat.includes('cake') || cat.includes('pastr')) return 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=200&q=60';
+if(cat.includes('ice cream')) return 'https://images.unsplash.com/photo-1557142046-c704a3adf364?w=200&q=60';
+if(cat.includes('cool')) return 'https://images.unsplash.com/photo-1517640033243-dc06bb716df5?w=200&q=60';
+if(cat.includes('snack')) return 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=200&q=60';
+if(cat.includes('light meal')) return 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=200&q=60';
+if(cat.includes('heavy meal')) return 'https://images.unsplash.com/photo-1544025162-8316c026e632?w=200&q=60';
+return 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=200&q=60';
+}
+
+function toggleCategory(categoryId) {
+const content = document.getElementById('content-' + categoryId);
+const icon = document.getElementById('icon-' + categoryId);
+const button = document.getElementById('btn-' + categoryId);
+
+if (content.classList.contains('open')) {
+content.classList.remove('open');
+icon.classList.remove('open');
+button.style.borderColor = 'transparent';
+} else {
+document.querySelectorAll('.accordion-content').forEach(el => el.classList.remove('open'));
+document.querySelectorAll('.chevron').forEach(el => el.classList.remove('open'));
+document.querySelectorAll('.cat-btn').forEach(el => el.style.borderColor = 'transparent');
+content.classList.add('open');
+icon.classList.add('open');
+button.style.borderColor = '#0047BA';
+setTimeout(() => {
+button.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}, 250);
+}
+}
+
+function renderAccordionMenu(data) {
+document.getElementById('loading').style.display = 'none';
+const container = document.getElementById('accordion-container');
+const categories = Object.keys(data);
+if (categories.length === 0) {
+container.innerHTML = '<p class="text-center text-cobaltBlue text-sm font-bold mt-10">No menu items found.</p>';
+return;
+}
+
+let html = '';
+categories.forEach(cat => {
+const items = data[cat] || [];
+const safeId = cat.replace(/[^a-zA-Z0-9]/g, '_');
+
+html += `
+<div class="glass-panel rounded-2xl overflow-hidden mb-2">
+<div id="btn-${safeId}" onclick="toggleCategory('${safeId}')" class="cat-btn w-full flex items-center justify-between px-5 py-5 border-l-[3px] border-transparent transition-all" style="cursor: pointer; -webkit-tap-highlight-color: transparent;">
+<div class="flex items-center gap-3">
+<span class="font-display font-bold text-lg tracking-widest text-cobaltBlue uppercase text-left drop-shadow-sm">
+${cat}
+</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-sans font-bold text-[10px] tracking-widest text-cobaltBlue/60 uppercase">
+${items.length} ITEMS
+</span>
+<svg id="icon-${safeId}" class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#0047BA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+</div>
+
+<div id="content-${safeId}" class="accordion-content bg-white/30">
+<div style="height: 1px; background-color: rgba(0,71,186,0.1);"></div>
+${items.map((item, idx) => {
+const img = item.imgUrl && item.imgUrl !== "" ? item.imgUrl : getFallbackImage(item.name, cat);
+const sNoStr = item.sNo ? String(item.sNo).padStart(2, "0") : String(idx+1).padStart(2, "0");
+let priceLabel = "";
+let isStringLabel = isNaN(parseFloat(item.price)) || String(item.price).toLowerCase().includes("soon");
+if (isStringLabel) {
+priceLabel = String(item.price);
+} else {
+priceLabel = CURRENCY_SYMBOL + parseFloat(item.price).toFixed(2);
+}
+let itemHtml = `
+<div>
+<div class="flex items-stretch gap-4 px-5 py-4">
+<div class="w-[76px] h-[76px] flex-shrink-0 bg-white/50 rounded-2xl overflow-hidden border border-cobaltBlue/10 shadow-sm" style="-webkit-transform: translateZ(0);">
+<img src="${img}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover rounded-2xl" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=200&q=60';" />
+</div>
+
+<div class="flex flex-col flex-1 justify-center min-w-0 py-1">
+<span class="font-sans font-bold text-[9px] tracking-widest text-cobaltBlue/50 mb-1 uppercase">
+ITEM #${sNoStr}
+</span>
+<span class="font-sans font-bold text-[13px] leading-tight text-cobaltBlue mb-2 break-words whitespace-normal pr-2">
+${item.name}
+</span>
+<div class="mt-auto">
+<span class="${isStringLabel ? 'bg-cobaltBlue/10 text-cobaltBlue/60' : 'bg-cobaltBlue text-creamBase'} font-sans font-bold text-[11px] px-2.5 py-1 inline-block rounded-md shadow-sm">
+${priceLabel}
+</span>
+</div>
+</div>
+</div>
+`;
+if (idx < items.length - 1) {
+itemHtml += `<div class="ml-[112px] mr-5 h-[1px] bg-cobaltBlue/10"></div>`;
+}
+itemHtml += `</div>`;
+return itemHtml;
+
+}).join('')}
+</div>
+</div>
+`;
+});
+container.innerHTML = html;
+}
+</script>
+</body>
+</html>
